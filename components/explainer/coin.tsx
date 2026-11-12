@@ -211,16 +211,28 @@ function CoinFace() {
       <circle r="116" fill="#d6e8f8" stroke={INK} strokeWidth="2.5" />
       <circle r="116" fill="url(#hatch)" />
       <path
-        d="M-8 -52 V-40 C-28 -36 -40 -24 -40 -8 C-40 10 -24 20 -4 24 C16 28 28 34 28 48 C28 64 14 74 -4 74 C-22 74 -36 64 -40 50 M-8 86 V74 M-8 -52 V-64"
+        d="M34 -20 C36 -40 18 -56 0 -56 C-22 -56 -40 -44 -40 -28 C-40 -12 -22 -2 0 0 C22 2 40 12 40 28 C40 44 22 56 0 56 C-18 56 -36 40 -34 20"
         fill="none"
         stroke={INK}
-        strokeWidth="8"
+        strokeWidth="9"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <ellipse cx="0" cy="6" rx="62" ry="16" fill="none" stroke={INK} strokeWidth="3" />
-      <path id="coin-ring" d="M0,-104 A104,104 0 1,1 -0.1,-104" fill="none" />
-      <text fill={INK} fontSize="11" fontFamily="var(--font-geist-sans), sans-serif" letterSpacing="1.5">
+      <path
+        d="M0 -72 V72"
+        fill="none"
+        stroke={INK}
+        strokeWidth="9"
+        strokeLinecap="round"
+      />
+      <path id="coin-ring" d="M0,-98 A98,98 0 1,1 -0.1,-98" fill="none" />
+      <text
+        fill={INK}
+        fontSize="10"
+        fontFamily="var(--font-geist-sans), sans-serif"
+        textLength="608"
+        lengthAdjust="spacing"
+      >
         <textPath href="#coin-ring">USDC · ONE DOLLAR · ONE TOKEN · USDC · ONE DOLLAR · ONE TOKEN ·</textPath>
       </text>
     </g>
