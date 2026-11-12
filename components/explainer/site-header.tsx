@@ -1,0 +1,40 @@
+type SiteHeaderProps = {
+  title: string;
+  labels: string[];
+  active: number;
+  onJump: (index: number) => void;
+};
+
+export function SiteHeader({ title, labels, active, onJump }: SiteHeaderProps) {
+  return (
+    <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--paper)]/95 px-4 py-3 backdrop-blur-sm sm:px-6">
+      <p className="text-center font-[family-name:var(--font-hand)] text-3xl leading-none text-[var(--ink)] md:text-5xl">
+        {title}
+      </p>
+      <div className="mt-3 flex items-center gap-3">
+        <p className="grid size-14 shrink-0 place-items-center rounded-2xl border-2 border-[var(--accent)] font-[family-name:var(--font-hand)] text-3xl leading-none text-[var(--accent)]">
+          {active + 1}
+        </p>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs tracking-wide text-[var(--muted)]">of {labels.length}</p>
+          <p className="truncate text-base text-[var(--ink)]">{labels[active]}</p>
+        </div>
+      </div>
+      <nav aria-label="Jump to a step" className="mt-3 flex h-1.5 gap-0.5">
+        {labels.map((label, index) => {
+          const reached = index <= active;
+          return (
+            <button
+              key={label}
+              type="button"
+              aria-label={`Step ${index + 1}: ${label}`}
+              aria-current={index === active ? "step" : undefined}
+              onClick={() => onJump(index)}
+              className={`h-full min-w-0 flex-1 rounded-full ${reached ? "bg-[var(--accent)]" : "bg-[var(--line)]"}`}
+            />
+          );
+        })}
+      </nav>
+    </header>
+  );
+}
