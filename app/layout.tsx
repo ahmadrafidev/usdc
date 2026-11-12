@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Geist } from "next/font/google";
+import { Geist, Patrick_Hand } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,8 +7,9 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const hand = Caveat({
+const hand = Patrick_Hand({
   variable: "--font-hand",
+  weight: "400",
   subsets: ["latin"],
 });
 
