@@ -16,6 +16,17 @@ export const reserves = {
   href: "https://www.circle.com/transparency",
 } as const;
 
+export const reservePool = [
+  { id: "other-bank", label: "Other bank deposits", amount: reserves.otherBankDeposits },
+  { id: "big-bank", label: "Deposits at the biggest banks", amount: reserves.systemicallyImportantDeposits },
+  { id: "repo", label: "Overnight Treasury repo", amount: reserves.overnightReverseRepo },
+  { id: "treasuries", label: "Treasuries under 3 months", amount: reserves.shortTreasuries },
+] as const;
+
+export function poolShare(amount: number): string {
+  return `${((amount / reserves.total) * 100).toFixed(1)}%`;
+}
+
 export const ethereumUsdc = {
   address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   decimals: 6,

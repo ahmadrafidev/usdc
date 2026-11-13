@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { Chapter, PieceFilter } from "@/lib/chapters";
+import { defaultToyState, type Chapter, type PieceFilter, type ToyState } from "@/lib/chapters";
 import { ChapterCopy } from "@/components/explainer/chapter-copy";
 import { Coin } from "@/components/explainer/coin";
 import { SiteHeader } from "@/components/explainer/site-header";
@@ -14,6 +14,7 @@ export function Explainer({ chapters }: ExplainerProps) {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(1);
   const [filter, setFilter] = useState<PieceFilter>("all");
+  const [toy, setToy] = useState<ToyState>(defaultToyState);
   const [reduced, setReduced] = useState(false);
   const sections = useRef<(HTMLElement | null)[]>([]);
   const headerRef = useRef<HTMLElement>(null);
@@ -75,6 +76,23 @@ export function Explainer({ chapters }: ExplainerProps) {
     };
   }, [reduced]);
 
+  useEffect(() => {
+    const scene = chapters[active].scene;
+    setToy((current) => {
+      const next: ToyState = {
+        selectedPoolIndex: scene === "reserves" ? current.selectedPoolIndex : defaultToyState.selectedPoolIndex,
+        marketPrice: scene === "peg" ? current.marketPrice : defaultToyState.marketPrice,
+      };
+      if (
+        next.selectedPoolIndex === current.selectedPoolIndex &&
+        next.marketPrice === current.marketPrice
+      ) {
+        return current;
+      }
+      return next;
+    });
+  }, [active, chapters]);
+
   const jump = (index: number) => {
     sections.current[index]?.scrollIntoView({
       behavior: reduced ? "auto" : "smooth",
@@ -106,6 +124,7 @@ export function Explainer({ chapters }: ExplainerProps) {
             previous={chapters[Math.max(0, active - 1)].scene}
             progress={progress}
             filter={chapters[active].showFilter ? filter : "all"}
+            toy={toy}
             reduced={reduced}
           />
         </div>
@@ -121,6 +140,8 @@ export function Explainer({ chapters }: ExplainerProps) {
               isLast={index === chapters.length - 1}
               filter={filter}
               onFilter={setFilter}
+              toy={toy}
+              onToy={(patch) => setToy((current) => ({ ...current, ...patch }))}
             />
           ))}
         </div>

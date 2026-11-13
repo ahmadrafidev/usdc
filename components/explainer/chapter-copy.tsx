@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type Ref } from "react";
-import { sideLabel, type Chapter, type PieceFilter } from "@/lib/chapters";
+import { sideLabel, type Chapter, type PieceFilter, type ToyState } from "@/lib/chapters";
+import { billions, poolShare, reservePool } from "@/lib/facts";
 
 const filters: { id: PieceFilter; label: string }[] = [
   { id: "all", label: "All" },
@@ -15,10 +16,12 @@ type ChapterCopyProps = {
   isLast: boolean;
   filter: PieceFilter;
   onFilter: (filter: PieceFilter) => void;
+  toy: ToyState;
+  onToy: (patch: Partial<ToyState>) => void;
   ref?: Ref<HTMLElement>;
 };
 
-export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: ChapterCopyProps) {
+export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onToy, ref }: ChapterCopyProps) {
   const isCentered = index === 0 || isLast;
 
   return (
@@ -56,6 +59,8 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: C
           ))}
         </div>
       ) : null}
+      {chapter.toy === "reserve-slices" ? <ReserveSlices toy={toy} onToy={onToy} /> : null}
+      {chapter.toy === "peg-drag" ? <PegDrag toy={toy} onToy={onToy} /> : null}
       {chapter.showFilter ? (
         <div className="mt-8" role="group" aria-label="Filter the pieces">
           <div className="flex w-fit rounded-full border border-[var(--line)] p-1">
@@ -130,6 +135,74 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: C
         </footer>
       ) : null}
     </section>
+  );
+}
+
+function ReserveSlices({ toy, onToy }: { toy: ToyState; onToy: (patch: Partial<ToyState>) => void }) {
+  const slice = reservePool[toy.selectedPoolIndex];
+
+  return (
+    <div className="mt-8 max-w-md">
+      <p className="mb-3 text-sm text-[var(--muted)]">Tap a slice of the pool</p>
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Reserve pool">
+        {reservePool.map((item, index) => {
+          const selected = index === toy.selectedPoolIndex;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => onToy({ selectedPoolIndex: index })}
+              className={`rounded-full px-3 py-1.5 text-sm ${selected ? "bg-[var(--accent)] text-white" : "border border-[var(--line)] text-[var(--ink)]"}`}
+            >
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-sm leading-6 text-[var(--muted)]" aria-live="polite">
+        {slice.label} is {poolShare(slice.amount)} of the pool, {billions(slice.amount)}. A holder does not own a slice.
+      </p>
+    </div>
+  );
+}
+
+function PegDrag({ toy, onToy }: { toy: ToyState; onToy: (patch: Partial<ToyState>) => void }) {
+  const price = toy.marketPrice;
+  const print = `$${price.toFixed(2)}`;
+  const caption =
+    price < 1
+      ? `At ${print} on an exchange, a Circle Mint customer can buy tokens and redeem them at one dollar. Everyone else gets whatever a buyer will pay.`
+      : price > 1
+        ? `At ${print} on an exchange, a Mint customer can mint at one dollar and sell into that print. Circle does not guarantee that price for anyone else.`
+        : `At ${print}, the market print matches Circle’s one-dollar mint and redemption. That cash-out is still only for a Mint account.`;
+
+  return (
+    <div className="mt-8 max-w-md">
+      <div className="flex items-baseline justify-between gap-3 text-sm text-[var(--muted)]">
+        <label htmlFor="market-print">Market print</label>
+        <span className="font-medium text-[var(--accent)]">{print}</span>
+      </div>
+      <input
+        id="market-print"
+        type="range"
+        min={0.94}
+        max={1.06}
+        step={0.01}
+        value={price}
+        aria-valuetext={print}
+        onChange={(event) => onToy({ marketPrice: Number(event.target.value) })}
+        className="mt-3 w-full accent-[var(--accent)]"
+      />
+      <div className="mt-1 flex justify-between text-xs text-[var(--muted)]">
+        <span>$0.94</span>
+        <span>$1.00</span>
+        <span>$1.06</span>
+      </div>
+      <p className="mt-3 text-sm leading-6 text-[var(--muted)]" aria-live="polite">
+        {caption}
+      </p>
+    </div>
   );
 }
 

@@ -2,6 +2,18 @@ import { billions, circulation, ethereumUsdc, reserveCoverage, reserves } from "
 
 export type PieceFilter = "all" | "record" | "circle";
 
+export type ToyId = "reserve-slices" | "peg-drag";
+
+export type ToyState = {
+  selectedPoolIndex: number;
+  marketPrice: number;
+};
+
+export const defaultToyState: ToyState = {
+  selectedPoolIndex: 0,
+  marketPrice: 1,
+};
+
 export type ChapterSide = "record" | "circle" | "both";
 
 export type SceneId =
@@ -39,6 +51,7 @@ export type Chapter = {
   scene: SceneId;
   side: ChapterSide | null;
   showFilter?: boolean;
+  toy?: ToyId;
   actions?: SourceLink[];
   paragraphs: string[];
   glossary: GlossaryEntry[];
@@ -300,6 +313,7 @@ export const chapters: Chapter[] = [
     title: "What backs the tokens",
     scene: "reserves",
     side: "circle",
+    toy: "reserve-slices",
     paragraphs: [
       `USDC is not a claim on a dollar bill with your name on it. On ${reserves.asOf}, Circle’s transparency page showed ${billions(reserves.total)} of reserves against ${billions(circulation.total)} in circulation. The difference, ${billions(reserveCoverage)}, is the amount by which reserves sat above the tokens.`,
       "Circle says those reserves are held for holders, apart from Circle’s own operating money. The majority sits in the Circle Reserve Fund, a government money-market fund managed by BlackRock. The rest is cash at banks. A holder does not own a slice of either, and does not choose what goes in.",
@@ -351,6 +365,7 @@ export const chapters: Chapter[] = [
     title: "Why the price stays near $1",
     scene: "peg",
     side: "both",
+    toy: "peg-drag",
     paragraphs: [
       "Circle says USDC is meant to stay at one dollar. With Circle itself, minting is one dollar per token, and redemption is one dollar per token, less fees where the schedule charges them. That cash-out is only for a Circle Mint account, into a bank.",
       "That is the mechanism. A trader who can redeem at Circle can buy tokens in the market when they trade under a dollar, then redeem them. People who cannot redeem directly get whatever price a buyer will pay.",

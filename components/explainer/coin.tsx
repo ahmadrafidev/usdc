@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { PieceFilter, SceneId } from "@/lib/chapters";
-import { billions, circulation, reserveCoverage, reserves } from "@/lib/facts";
+import type { PieceFilter, SceneId, ToyState } from "@/lib/chapters";
+import { billions, circulation, poolShare, reserveCoverage, reservePool, reserves } from "@/lib/facts";
 
 type LayerId =
   | "coin"
@@ -58,6 +58,7 @@ type CoinProps = {
   previous: SceneId;
   progress: number;
   filter: PieceFilter;
+  toy: ToyState;
   reduced: boolean;
 };
 
@@ -353,14 +354,37 @@ function NetworkParity() {
   );
 }
 
-const POOL = [
-  ["Other bank deposits", reserves.otherBankDeposits],
-  ["Deposits at the biggest banks", reserves.systemicallyImportantDeposits],
-  ["Overnight Treasury repo", reserves.overnightReverseRepo],
-  ["Treasuries under 3 months", reserves.shortTreasuries],
-] as const;
+const SLICE_FILL = ["#fffdf8", "#9ec4e6", BLUE, "#d6e8f8"] as const;
+const SLICE_SHORT = ["Other banks", "Biggest banks", "Overnight repo", "Short Treasuries"] as const;
 
-function ReserveBoard() {
+function donutSlice(outer: number, inner: number, start: number, end: number) {
+  const large = end - start > Math.PI ? 1 : 0;
+  const round = (value: number) => Math.round(value * 100) / 100;
+  const ox1 = round(Math.cos(start) * outer);
+  const oy1 = round(Math.sin(start) * outer);
+  const ox2 = round(Math.cos(end) * outer);
+  const oy2 = round(Math.sin(end) * outer);
+  const ix1 = round(Math.cos(end) * inner);
+  const iy1 = round(Math.sin(end) * inner);
+  const ix2 = round(Math.cos(start) * inner);
+  const iy2 = round(Math.sin(start) * inner);
+  return `M ${ox1} ${oy1} A ${outer} ${outer} 0 ${large} 1 ${ox2} ${oy2} L ${ix1} ${iy1} A ${inner} ${inner} 0 ${large} 0 ${ix2} ${iy2} Z`;
+}
+
+function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
+  const selected = reservePool[selectedPoolIndex];
+  const outer = 128;
+  const inner = 72;
+  let angle = -Math.PI / 2;
+  const slices = reservePool.map((item) => {
+    const sweep = (item.amount / reserves.total) * Math.PI * 2;
+    const start = angle;
+    const end = angle + sweep;
+    const mid = start + sweep / 2;
+    angle = end;
+    return { start, end, mid };
+  });
+
   return (
     <g fontFamily="var(--font-geist-sans), sans-serif">
       <text x="0" y="-268" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="32">
@@ -377,34 +401,87 @@ function ReserveBoard() {
           ["Above circulation", billions(reserveCoverage), BLUE],
         ] as const
       ).map(([label, value, color], index) => (
-        <g key={label} transform={`translate(-230 ${-200 + index * 78})`}>
-          <rect width="210" height="68" rx="14" fill="#fffdf8" stroke="#d7d1c7" />
-          <text x="16" y="26" fill="#5c675f" fontSize="13">
+        <g key={label} transform={`translate(${-240 + index * 160} -218)`}>
+          <rect width="148" height="58" rx="12" fill="#fffdf8" stroke="#d7d1c7" />
+          <text x="14" y="22" fill="#5c675f" fontSize="12">
             {label}
           </text>
-          <text x="16" y="50" fill={color} fontSize="18">
+          <text x="14" y="44" fill={color} fontSize="15">
             {value}
           </text>
         </g>
       ))}
 
-      <text x="10" y="-176" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="26">
-        In the pool
-      </text>
-      {POOL.map(([item, amount], index) => (
-        <g key={item} transform={`translate(10 ${-142 + index * 40})`}>
-          <circle cx="8" cy="-5" r="5" fill={BLUE} />
-          <text x="24" y="-10" fill={INK} fontSize="15">
-            {item}
-          </text>
-          <text x="24" y="8" fill="#5c675f" fontSize="13">
-            {billions(amount)}
+      <g transform="translate(0 48)">
+        {slices.map((slice, index) => {
+          const isSelected = index === selectedPoolIndex;
+          const explode = isSelected ? 10 : 0;
+          const dx = Math.cos(slice.mid) * explode;
+          const dy = Math.sin(slice.mid) * explode;
+          return (
+            <path
+              key={reservePool[index].id}
+              d={donutSlice(outer, inner, slice.start, slice.end)}
+              transform={`translate(${dx} ${dy})`}
+              fill={SLICE_FILL[index]}
+              stroke={INK}
+              strokeWidth={isSelected ? 3 : 1.8}
+            />
+          );
+        })}
+        <text x="0" y="-8" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="36">
+          {poolShare(selected.amount)}
+        </text>
+        <text x="0" y="18" fill="#5c675f" textAnchor="middle" fontSize="13">
+          of the pool
+        </text>
+      </g>
+
+      {SLICE_SHORT.map((label, index) => (
+        <g key={label} transform={`translate(${index % 2 === 0 ? -168 : 16} ${222 + Math.floor(index / 2) * 28})`}>
+          <rect x="0" y="-11" width="14" height="14" rx="3" fill={SLICE_FILL[index]} stroke={INK} strokeWidth="1.2" />
+          <text x="22" y="1" fill={index === selectedPoolIndex ? BLUE : INK} fontSize="14">
+            {label}
           </text>
         </g>
       ))}
 
-      <text x="0" y="168" fill="#5c675f" textAnchor="middle" fontSize="14">
-        A holder does not own a slice. Cash-out is face value, minus fees.
+      <text x="0" y="292" fill="#5c675f" textAnchor="middle" fontSize="14">
+        {selected.label} · {billions(selected.amount)}. A holder does not own a slice.
+      </text>
+    </g>
+  );
+}
+
+function marketPath(price: number) {
+  const amp = -((price - 1) / 0.06) * 48;
+  return `M -160 ${8 + amp * 0.12} C -110 ${8 + amp * 0.18}, -80 ${8 + amp * 0.35}, -40 ${8 + amp} S 20 ${8 + amp * 0.35}, 80 ${8 + amp * 0.12} S 140 ${8 + amp * 0.04}, 170 ${8}`;
+}
+
+function PegBoard({ price }: { price: number }) {
+  const print = `$${price.toFixed(2)}`;
+
+  return (
+    <g>
+      <text x="-160" y="-90" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="30">
+        one dollar, with Circle
+      </text>
+      <line x1="-160" y1="0" x2="170" y2="0" stroke="#c9c2b6" strokeWidth="2" strokeDasharray="4 6" />
+      <text x="178" y="4" fill={BLUE} fontSize="14" fontFamily="var(--font-geist-sans), sans-serif">
+        $1
+      </text>
+      <path
+        d={marketPath(price)}
+        fill="none"
+        stroke={INK}
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <text x="-160" y={price < 1 ? 78 : price > 1 ? -28 : 78} fill={BLUE} fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
+        {print} in the market
+      </text>
+      <text x="-160" y="108" fill="#5c675f" fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
+        exchanges trade at whatever buyers pay
       </text>
     </g>
   );
@@ -450,7 +527,7 @@ function InterestSplit() {
   );
 }
 
-export function Coin({ scene, previous, progress, filter, reduced }: CoinProps) {
+export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinProps) {
   const pose = applyFilter(blendScenes(scene, previous, reduced ? 1 : progress), filter);
 
   return (
@@ -519,7 +596,7 @@ export function Coin({ scene, previous, progress, filter, reduced }: CoinProps) 
       </Layer>
 
       <Layer id="reserves" pose={pose.reserves}>
-        <ReserveBoard />
+        <ReserveBoard selectedPoolIndex={toy.selectedPoolIndex} />
       </Layer>
 
       <Layer id="yield" pose={pose.yield}>
@@ -527,25 +604,7 @@ export function Coin({ scene, previous, progress, filter, reduced }: CoinProps) 
       </Layer>
 
       <Layer id="peg" pose={pose.peg}>
-        <g>
-          <text x="-160" y="-90" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="30">
-            one dollar, with Circle
-          </text>
-          <line x1="-160" y1="0" x2="170" y2="0" stroke="#c9c2b6" strokeWidth="2" strokeDasharray="4 6" />
-          <text x="178" y="4" fill={BLUE} fontSize="14" fontFamily="var(--font-geist-sans), sans-serif">
-            $1
-          </text>
-          <path
-            d="M -160 8 C -110 8, -80 10, -40 36 S 20 18, 80 6 S 140 4, 170 2"
-            fill="none"
-            stroke={INK}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          <text x="-160" y="78" fill="#5c675f" fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
-            exchanges trade at whatever buyers pay
-          </text>
-        </g>
+        <PegBoard price={toy.marketPrice} />
       </Layer>
 
       <Layer id="freeze" pose={pose.freeze}>
