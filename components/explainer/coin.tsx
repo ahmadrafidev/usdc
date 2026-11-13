@@ -49,9 +49,23 @@ const LAYER_SIDE: Record<LayerId, "record" | "circle" | "both"> = {
   terms: "circle",
 };
 
-const INK = "#24312c";
-const BLUE = "#2775ca";
-const PAPER = "#f6f4ef";
+const INK = "var(--ink)";
+const BLUE = "var(--accent)";
+const PAPER = "var(--paper)";
+const MUTED = "var(--muted)";
+const LINE = "var(--line)";
+const CARD = "var(--card)";
+const WASH = "var(--wash)";
+const SHADE = "var(--shade)";
+const HIGHLIGHT = "var(--highlight)";
+const BURN = "var(--burn)";
+const BURN_FILL = "var(--burn-fill)";
+const CARD_BLUE = "var(--card-blue)";
+const TICK = "var(--tick)";
+const DASH = "var(--dash)";
+const SLICE_MID = "var(--slice-mid)";
+const SHEEN = "var(--sheen)";
+const SHADE_DEEP = "var(--shade-deep)";
 
 type CoinProps = {
   scene: SceneId;
@@ -209,7 +223,7 @@ function CoinFace() {
     <g>
       <circle r="138" fill={PAPER} stroke={INK} strokeWidth="3" />
       <Reed radius={132} />
-      <circle r="116" fill="#d6e8f8" stroke={INK} strokeWidth="2.5" />
+      <circle r="116" fill={WASH} stroke={INK} strokeWidth="2.5" />
       <circle r="116" fill="url(#hatch)" />
       <path
         d="M34 -20 C36 -40 18 -56 0 -56 C-22 -56 -40 -44 -40 -28 C-40 -12 -22 -2 0 0 C22 2 40 12 40 28 C40 44 22 56 0 56 C-18 56 -36 40 -34 20"
@@ -251,7 +265,7 @@ function LedgerSheet({ mode }: { mode: "balance" | "mint" | "frozen" }) {
 
   return (
     <g>
-      <ellipse rx="168" ry="78" fill="#efeae2" stroke={INK} strokeWidth="2.5" />
+      <ellipse rx="168" ry="78" fill={SHADE} stroke={INK} strokeWidth="2.5" />
       <ellipse rx="168" ry="78" fill="url(#ledger-shade)" />
       <text x="-146" y="-52" fill={BLUE} fontFamily="var(--font-hand), cursive" fontSize="22">
         balances
@@ -263,22 +277,22 @@ function LedgerSheet({ mode }: { mode: "balance" | "mint" | "frozen" }) {
         const burned = mode === "mint" && index === 4;
         return (
           <g key={address}>
-            {highlighted ? <rect x="-150" y={y - 13} width="300" height="18" rx="4" fill="#c5ddf4" /> : null}
-            {burned ? <rect x="-150" y={y - 13} width="300" height="18" rx="4" fill="#f8d0cb" /> : null}
+            {highlighted ? <rect x="-150" y={y - 13} width="300" height="18" rx="4" fill={HIGHLIGHT} /> : null}
+            {burned ? <rect x="-150" y={y - 13} width="300" height="18" rx="4" fill={BURN_FILL} /> : null}
             <text x="-142" y={y} fill={INK} fontSize="13" fontFamily="ui-monospace, monospace">
               {address}
             </text>
             <text
               x="142"
               y={y}
-              fill={burned ? "#9f2d22" : INK}
+              fill={burned ? BURN : INK}
               fontSize="13"
               fontFamily="ui-monospace, monospace"
               textAnchor="end"
             >
               {amount}
             </text>
-            {burned ? <line x1="-150" y1={y - 4} x2="150" y2={y - 4} stroke="#9f2d22" strokeWidth="1.6" /> : null}
+            {burned ? <line x1="-150" y1={y - 4} x2="150" y2={y - 4} stroke={BURN} strokeWidth="1.6" /> : null}
             {mode === "frozen" && highlighted ? (
               <text x="86" y={y} fontSize="12">
                 🔒
@@ -297,13 +311,13 @@ function LedgerSheet({ mode }: { mode: "balance" | "mint" | "frozen" }) {
           <text x="-120" y="92" fill={BLUE}>
             new USDC
           </text>
-          <text x="70" y="92" fill="#9f2d22">
+          <text x="70" y="92" fill={BURN}>
             pulled back
           </text>
         </g>
       ) : null}
       {mode === "frozen" ? (
-        <text x="0" y="96" fill="#9f2d22" fontFamily="var(--font-hand), cursive" fontSize="26" textAnchor="middle">
+        <text x="0" y="96" fill={BURN} fontFamily="var(--font-hand), cursive" fontSize="26" textAnchor="middle">
           can’t move
         </text>
       ) : null}
@@ -354,7 +368,7 @@ function NetworkParity() {
   );
 }
 
-const SLICE_FILL = ["#fffdf8", "#9ec4e6", BLUE, "#d6e8f8"] as const;
+const SLICE_FILL = [CARD, SLICE_MID, BLUE, WASH] as const;
 const SLICE_SHORT = ["Other banks", "Biggest banks", "Overnight repo", "Short Treasuries"] as const;
 
 function donutSlice(outer: number, inner: number, start: number, end: number) {
@@ -390,7 +404,7 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
       <text x="0" y="-268" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="32">
         {reserves.asOf}
       </text>
-      <text x="0" y="-236" fill="#5c675f" textAnchor="middle" fontSize="13">
+      <text x="0" y="-236" fill={MUTED} textAnchor="middle" fontSize="13">
         Circle transparency page
       </text>
 
@@ -402,8 +416,8 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
         ] as const
       ).map(([label, value, color], index) => (
         <g key={label} transform={`translate(${-240 + index * 160} -218)`}>
-          <rect width="148" height="58" rx="12" fill="#fffdf8" stroke="#d7d1c7" />
-          <text x="14" y="22" fill="#5c675f" fontSize="12">
+          <rect width="148" height="58" rx="12" fill={CARD} stroke={LINE} />
+          <text x="14" y="22" fill={MUTED} fontSize="12">
             {label}
           </text>
           <text x="14" y="44" fill={color} fontSize="15">
@@ -432,7 +446,7 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
         <text x="0" y="-8" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="36">
           {poolShare(selected.amount)}
         </text>
-        <text x="0" y="18" fill="#5c675f" textAnchor="middle" fontSize="13">
+        <text x="0" y="18" fill={MUTED} textAnchor="middle" fontSize="13">
           of the pool
         </text>
       </g>
@@ -446,7 +460,7 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
         </g>
       ))}
 
-      <text x="0" y="292" fill="#5c675f" textAnchor="middle" fontSize="14">
+      <text x="0" y="292" fill={MUTED} textAnchor="middle" fontSize="14">
         {selected.label} · {billions(selected.amount)}. A holder does not own a slice.
       </text>
     </g>
@@ -456,7 +470,7 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
 function InterestSplit() {
   return (
     <g fontFamily="var(--font-geist-sans), sans-serif">
-      <rect x="-270" y="-150" width="230" height="250" rx="18" fill="#fffdf8" stroke="#d7d1c7" />
+      <rect x="-270" y="-150" width="230" height="250" rx="18" fill={CARD} stroke={LINE} />
       <circle cx="-155" cy="-78" r="36" fill={PAPER} stroke={INK} strokeWidth="2.5" />
       <text x="-155" y="-68" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="28">
         $
@@ -467,7 +481,7 @@ function InterestSplit() {
       <text x="-155" y="28" fill={BLUE} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="40">
         $1
       </text>
-      <text x="-155" y="58" fill="#5c675f" textAnchor="middle" fontSize="14">
+      <text x="-155" y="58" fill={MUTED} textAnchor="middle" fontSize="14">
         face value, minus fees
       </text>
 
@@ -476,17 +490,17 @@ function InterestSplit() {
         the return
       </text>
 
-      <rect x="40" y="-150" width="230" height="250" rx="18" fill="#e8f2fb" stroke={BLUE} />
+      <rect x="40" y="-150" width="230" height="250" rx="18" fill={CARD_BLUE} stroke={BLUE} />
       <text x="155" y="-78" fill={INK} textAnchor="middle" fontFamily="var(--font-hand), cursive" fontSize="30">
         Circle keeps it
       </text>
-      <text x="155" y="-28" fill="#5c675f" textAnchor="middle" fontSize="15">
+      <text x="155" y="-28" fill={MUTED} textAnchor="middle" fontSize="15">
         Interest on the reserves
       </text>
-      <text x="155" y="4" fill="#5c675f" textAnchor="middle" fontSize="15">
+      <text x="155" y="4" fill={MUTED} textAnchor="middle" fontSize="15">
         is not paid to holders.
       </text>
-      <text x="0" y="150" fill="#5c675f" textAnchor="middle" fontSize="14">
+      <text x="0" y="150" fill={MUTED} textAnchor="middle" fontSize="14">
         Holding USDC is not a savings account.
       </text>
     </g>
@@ -500,11 +514,11 @@ export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinPr
     <svg viewBox="0 0 640 680" className="h-full w-full" role="img" aria-label="Illustrated breakdown of a USDC token">
       <defs>
         <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
-          <line x1="0" y1="0" x2="0" y2="7" stroke="#8eb7e0" strokeWidth="1.4" />
+          <line x1="0" y1="0" x2="0" y2="7" stroke={TICK} strokeWidth="1.4" />
         </pattern>
         <radialGradient id="ledger-shade" cx="50%" cy="40%" r="70%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#cfc6b8" stopOpacity="0.35" />
+          <stop offset="0%" stopColor={SHEEN} stopOpacity="0.35" />
+          <stop offset="100%" stopColor={SHADE_DEEP} stopOpacity="0.35" />
         </radialGradient>
         <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
           <path d="M0,0 L6,3 L0,6 Z" fill={BLUE} />
@@ -534,7 +548,7 @@ export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinPr
           <text x="-126" y="4" fill={INK} fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
             6 decimal places
           </text>
-          <text x="-126" y="32" fill="#5c675f" fontSize="15" fontFamily="var(--font-geist-sans), sans-serif">
+          <text x="-126" y="32" fill={MUTED} fontSize="15" fontFamily="var(--font-geist-sans), sans-serif">
             smallest unit 0.000001
           </text>
           <text x="-126" y="78" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="28">
@@ -574,7 +588,7 @@ export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinPr
           <text x="-160" y="-90" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="30">
             one dollar, with Circle
           </text>
-          <line x1="-160" y1="0" x2="170" y2="0" stroke="#c9c2b6" strokeWidth="2" strokeDasharray="4 6" />
+          <line x1="-160" y1="0" x2="170" y2="0" stroke={DASH} strokeWidth="2" strokeDasharray="4 6" />
           <text x="178" y="4" fill={BLUE} fontSize="14" fontFamily="var(--font-geist-sans), sans-serif">
             $1
           </text>
@@ -585,7 +599,7 @@ export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinPr
             strokeWidth="2.5"
             strokeLinecap="round"
           />
-          <text x="-160" y="78" fill="#5c675f" fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
+          <text x="-160" y="78" fill={MUTED} fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
             exchanges trade at whatever buyers pay
           </text>
         </g>

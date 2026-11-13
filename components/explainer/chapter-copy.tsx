@@ -72,7 +72,7 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
                   type="button"
                   aria-pressed={selected}
                   onClick={() => onFilter(item.id)}
-                  className={`rounded-full px-4 py-1.5 text-sm ${selected ? "bg-[var(--accent)] text-white" : "text-[var(--ink)]"}`}
+                  className={`rounded-full px-4 py-1.5 text-sm ${selected ? "bg-[var(--accent)] text-[var(--on-accent)]" : "text-[var(--ink)]"}`}
                 >
                   {item.label}
                 </button>
@@ -89,7 +89,7 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
               href={action.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`rounded-full px-4 py-2 text-sm ${actionIndex === 0 ? "bg-[var(--accent)] text-white" : "border border-[var(--line)] text-[var(--ink)] hover:text-[var(--accent)]"}`}
+              className={`rounded-full px-4 py-2 text-sm ${actionIndex === 0 ? "bg-[var(--accent)] text-[var(--on-accent)]" : "border border-[var(--line)] text-[var(--ink)] hover:text-[var(--accent)]"}`}
             >
               {action.label}
             </a>
@@ -121,7 +121,7 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
             href="https://whatisusdt.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex w-fit rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-white"
+            className="mt-4 inline-flex w-fit rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[var(--on-accent)]"
           >
             See How It Works
           </a>
@@ -167,7 +167,7 @@ function ReserveSlices({ toy, onToy }: { toy: ToyState; onToy: (patch: Partial<T
               type="button"
               aria-pressed={selected}
               onClick={() => onToy({ selectedPoolIndex: index })}
-              className={`rounded-full px-3 py-1.5 text-sm ${selected ? "bg-[var(--accent)] text-white" : "border border-[var(--line)] text-[var(--ink)]"}`}
+              className={`rounded-full px-3 py-1.5 text-sm ${selected ? "bg-[var(--accent)] text-[var(--on-accent)]" : "border border-[var(--line)] text-[var(--ink)]"}`}
             >
               {item.label}
             </button>

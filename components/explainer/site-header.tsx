@@ -1,4 +1,5 @@
 import type { Ref } from "react";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 type SiteHeaderProps = {
   title: string;
@@ -25,6 +26,7 @@ export function SiteHeader({ title, labels, active, onJump, ref }: SiteHeaderPro
           <p className="text-xs tracking-wide text-[var(--muted)]">of {labels.length}</p>
           <p className="truncate text-sm text-[var(--ink)] sm:text-base">{labels[active]}</p>
         </div>
+        <ThemeToggle />
       </div>
       <nav aria-label="Jump to a step" className="mt-3 flex h-1.5 gap-0.5">
         {labels.map((label, index) => {

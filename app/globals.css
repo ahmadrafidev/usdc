@@ -1,14 +1,52 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  color-scheme: light;
   --paper: #f6f4ef;
   --ink: #1c2428;
   --muted: #5e6567;
   --line: #d7d1c7;
   --accent: #2775ca;
+  --on-accent: #ffffff;
+  --card: #fffdf8;
+  --wash: #d6e8f8;
+  --shade: #efeae2;
+  --highlight: #c5ddf4;
+  --burn: #9f2d22;
+  --burn-fill: #f8d0cb;
+  --card-blue: #e8f2fb;
+  --tick: #8eb7e0;
+  --dash: #c9c2b6;
+  --slice-mid: #9ec4e6;
+  --sheen: #ffffff;
+  --shade-deep: #cfc6b8;
   --background: var(--paper);
   --foreground: var(--ink);
   --header-offset: 141px;
+}
+
+.dark {
+  color-scheme: dark;
+  --paper: #161411;
+  --ink: #f3efe8;
+  --muted: #b7aea3;
+  --line: #3f3830;
+  --accent: #7eb6ef;
+  --on-accent: #101418;
+  --card: #241f1a;
+  --wash: #1c3348;
+  --shade: #2c271f;
+  --highlight: #2a4a68;
+  --burn: #f0a8a0;
+  --burn-fill: #4a2c28;
+  --card-blue: #1a2d40;
+  --tick: #4d7396;
+  --dash: #5c554c;
+  --slice-mid: #3d6d99;
+  --sheen: #3a342c;
+  --shade-deep: #0c0b09;
 }
 
 @media (min-width: 768px) {
