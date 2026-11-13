@@ -56,6 +56,12 @@ export function Explainer({ chapters }: ExplainerProps) {
         }
       });
 
+      const last = sections.current[sections.current.length - 1];
+      if (last && last.getBoundingClientRect().bottom <= probe) {
+        nextIndex = sections.current.length - 1;
+        nextProgress = 1;
+      }
+
       setActive(nextIndex);
       setProgress(reduced ? 1 : nextProgress);
     };
@@ -112,28 +118,11 @@ export function Explainer({ chapters }: ExplainerProps) {
               }}
               chapter={chapter}
               index={index}
+              isLast={index === chapters.length - 1}
               filter={filter}
               onFilter={setFilter}
             />
           ))}
-          <footer className="space-y-2 px-5 pb-16 text-sm leading-6 text-[var(--muted)] sm:px-10 lg:px-14">
-            <p>
-              Not affiliated with Circle. Figures are taken from Circle’s public pages and can change. The
-              Ethereum contract’s decimal count was read from the contract Circle publishes.
-            </p>
-            <p>
-              Built by{" "}
-              <a
-                href="https://x.com/rafiiwirana"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--accent)]"
-              >
-                @rafiiwirana
-              </a>
-              .
-            </p>
-          </footer>
         </div>
       </div>
     </div>

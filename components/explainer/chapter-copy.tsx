@@ -12,12 +12,13 @@ const filters: { id: PieceFilter; label: string }[] = [
 type ChapterCopyProps = {
   chapter: Chapter;
   index: number;
+  isLast: boolean;
   filter: PieceFilter;
   onFilter: (filter: PieceFilter) => void;
   ref?: Ref<HTMLElement>;
 };
 
-export function ChapterCopy({ chapter, index, filter, onFilter, ref }: ChapterCopyProps) {
+export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: ChapterCopyProps) {
   return (
     <section
       ref={ref}
@@ -73,22 +74,59 @@ export function ChapterCopy({ chapter, index, filter, onFilter, ref }: ChapterCo
           </div>
         </div>
       ) : null}
-      <p className="mt-8 max-w-md text-sm leading-6 text-[var(--muted)]">
-        {chapter.sources.map((source, sourceIndex) => (
-          <span key={source.href}>
-            {sourceIndex === 0 ? "Source: " : ""}
+      {chapter.actions ? (
+        <div className="mt-8 flex max-w-md flex-wrap gap-2">
+          {chapter.actions.map((action, actionIndex) => (
             <a
-              href={source.href}
+              key={action.href}
+              href={action.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`rounded-full px-4 py-2 text-sm ${actionIndex === 0 ? "bg-[var(--accent)] text-white" : "border border-[var(--line)] text-[var(--ink)] hover:text-[var(--accent)]"}`}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      ) : null}
+      {chapter.sources.length > 0 ? (
+        <p className="mt-8 max-w-md text-sm leading-6 text-[var(--muted)]">
+          {chapter.sources.map((source, sourceIndex) => (
+            <span key={source.href}>
+              {sourceIndex === 0 ? "Source: " : ""}
+              <a
+                href={source.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--accent)]"
+              >
+                {source.label}
+              </a>
+              {sourceIndex < chapter.sources.length - 1 ? " · " : ""}
+            </span>
+          ))}
+        </p>
+      ) : null}
+      {isLast ? (
+        <footer className="mt-12 max-w-md space-y-2 border-t border-[var(--line)] pt-8 text-sm leading-6 text-[var(--muted)]">
+          <p>
+            Not affiliated with Circle. All figures are sourced from Circle’s public pages and may change. 
+            This project is for informational and educational purposes only.
+          </p>
+          <p>
+            Built by{" "}
+            <a
+              href="https://x.com/rafiiwirana"
               target="_blank"
               rel="noopener noreferrer"
               className="underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--accent)]"
             >
-              {source.label}
+              @rafiiwirana
             </a>
-            {sourceIndex < chapter.sources.length - 1 ? " · " : ""}
-          </span>
-        ))}
-      </p>
+            .
+          </p>
+        </footer>
+      ) : null}
     </section>
   );
 }

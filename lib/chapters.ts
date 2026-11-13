@@ -39,6 +39,7 @@ export type Chapter = {
   scene: SceneId;
   side: ChapterSide | null;
   showFilter?: boolean;
+  actions?: SourceLink[];
   paragraphs: string[];
   glossary: GlossaryEntry[];
   sources: SourceLink[];
@@ -428,5 +429,21 @@ export const chapters: Chapter[] = [
     ],
     glossary: [],
     sources: [transparency, terms, contracts],
+  },
+  {
+    id: "check",
+    title: "Check it yourself",
+    scene: "intro",
+    side: null,
+    paragraphs: [
+      "The balance and the contract are public. The reserves, the cash-out, and the freeze rules are on Circle’s pages. Open them.",
+    ],
+    glossary: [],
+    sources: [],
+    actions: [
+      { label: "Read the terms", href: terms.href },
+      { label: "See the reserves", href: transparency.href },
+      { label: "Check the contract", href: contracts.href },
+    ],
   },
 ];
