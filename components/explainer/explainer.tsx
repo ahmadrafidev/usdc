@@ -81,12 +81,8 @@ export function Explainer({ chapters }: ExplainerProps) {
     setToy((current) => {
       const next: ToyState = {
         selectedPoolIndex: scene === "reserves" ? current.selectedPoolIndex : defaultToyState.selectedPoolIndex,
-        marketPrice: scene === "peg" ? current.marketPrice : defaultToyState.marketPrice,
       };
-      if (
-        next.selectedPoolIndex === current.selectedPoolIndex &&
-        next.marketPrice === current.marketPrice
-      ) {
+      if (next.selectedPoolIndex === current.selectedPoolIndex) {
         return current;
       }
       return next;

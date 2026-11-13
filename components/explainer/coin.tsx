@@ -453,40 +453,6 @@ function ReserveBoard({ selectedPoolIndex }: { selectedPoolIndex: number }) {
   );
 }
 
-function marketPath(price: number) {
-  const amp = -((price - 1) / 0.06) * 48;
-  return `M -160 ${8 + amp * 0.12} C -110 ${8 + amp * 0.18}, -80 ${8 + amp * 0.35}, -40 ${8 + amp} S 20 ${8 + amp * 0.35}, 80 ${8 + amp * 0.12} S 140 ${8 + amp * 0.04}, 170 ${8}`;
-}
-
-function PegBoard({ price }: { price: number }) {
-  const print = `$${price.toFixed(2)}`;
-
-  return (
-    <g>
-      <text x="-160" y="-90" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="30">
-        one dollar, with Circle
-      </text>
-      <line x1="-160" y1="0" x2="170" y2="0" stroke="#c9c2b6" strokeWidth="2" strokeDasharray="4 6" />
-      <text x="178" y="4" fill={BLUE} fontSize="14" fontFamily="var(--font-geist-sans), sans-serif">
-        $1
-      </text>
-      <path
-        d={marketPath(price)}
-        fill="none"
-        stroke={INK}
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      <text x="-160" y={price < 1 ? 78 : price > 1 ? -28 : 78} fill={BLUE} fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
-        {print} in the market
-      </text>
-      <text x="-160" y="108" fill="#5c675f" fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
-        exchanges trade at whatever buyers pay
-      </text>
-    </g>
-  );
-}
-
 function InterestSplit() {
   return (
     <g fontFamily="var(--font-geist-sans), sans-serif">
@@ -604,7 +570,25 @@ export function Coin({ scene, previous, progress, filter, toy, reduced }: CoinPr
       </Layer>
 
       <Layer id="peg" pose={pose.peg}>
-        <PegBoard price={toy.marketPrice} />
+        <g>
+          <text x="-160" y="-90" fill={INK} fontFamily="var(--font-hand), cursive" fontSize="30">
+            one dollar, with Circle
+          </text>
+          <line x1="-160" y1="0" x2="170" y2="0" stroke="#c9c2b6" strokeWidth="2" strokeDasharray="4 6" />
+          <text x="178" y="4" fill={BLUE} fontSize="14" fontFamily="var(--font-geist-sans), sans-serif">
+            $1
+          </text>
+          <path
+            d="M -160 8 C -110 8, -80 10, -40 36 S 20 18, 80 6 S 140 4, 170 2"
+            fill="none"
+            stroke={INK}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          <text x="-160" y="78" fill="#5c675f" fontSize="16" fontFamily="var(--font-geist-sans), sans-serif">
+            exchanges trade at whatever buyers pay
+          </text>
+        </g>
       </Layer>
 
       <Layer id="freeze" pose={pose.freeze}>

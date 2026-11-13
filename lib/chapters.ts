@@ -2,16 +2,14 @@ import { billions, circulation, ethereumUsdc, reserveCoverage, reserves } from "
 
 export type PieceFilter = "all" | "record" | "circle";
 
-export type ToyId = "reserve-slices" | "peg-drag";
+export type ToyId = "reserve-slices";
 
 export type ToyState = {
   selectedPoolIndex: number;
-  marketPrice: number;
 };
 
 export const defaultToyState: ToyState = {
   selectedPoolIndex: 0,
-  marketPrice: 1,
 };
 
 export type ChapterSide = "record" | "circle" | "both";
@@ -365,7 +363,6 @@ export const chapters: Chapter[] = [
     title: "Why the price stays near $1",
     scene: "peg",
     side: "both",
-    toy: "peg-drag",
     paragraphs: [
       "Circle says USDC is meant to stay at one dollar. With Circle itself, minting is one dollar per token, and redemption is one dollar per token, less fees where the schedule charges them. That cash-out is only for a Circle Mint account, into a bank.",
       "That is the mechanism. A trader who can redeem at Circle can buy tokens in the market when they trade under a dollar, then redeem them. People who cannot redeem directly get whatever price a buyer will pay.",
