@@ -19,11 +19,13 @@ type ChapterCopyProps = {
 };
 
 export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: ChapterCopyProps) {
+  const isCentered = index === 0 || isLast;
+
   return (
     <section
       ref={ref}
       id={chapter.id}
-      className="flex min-h-[78vh] scroll-mt-[calc(36vh+var(--header-offset))] flex-col justify-center px-5 py-16 sm:px-10 lg:min-h-[110vh] lg:scroll-mt-[var(--header-offset)] lg:px-14"
+      className={`flex min-h-[62vh] scroll-mt-[calc(36vh+var(--header-offset))] flex-col px-5 py-12 sm:px-10 lg:min-h-[calc(100svh-var(--header-offset))] lg:scroll-mt-[var(--header-offset)] lg:px-14 lg:py-16${isCentered ? " justify-center" : ""}`}
     >
       {chapter.side ? (
         <p className="mb-4 w-fit rounded-full border border-[var(--line)] px-2.5 py-1 text-xs font-medium text-[var(--accent)]">

@@ -78,7 +78,7 @@ export function Explainer({ chapters }: ExplainerProps) {
   const jump = (index: number) => {
     sections.current[index]?.scrollIntoView({
       behavior: reduced ? "auto" : "smooth",
-      block: "center",
+      block: "start",
     });
   };
 
