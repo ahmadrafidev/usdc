@@ -22,7 +22,7 @@ type ChapterCopyProps = {
 };
 
 export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onToy, ref }: ChapterCopyProps) {
-  const isCentered = index === 0 || isLast;
+  const isCentered = index === 0;
 
   return (
     <section
@@ -30,6 +30,7 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
       id={chapter.id}
       className={`flex min-h-[62vh] scroll-mt-[calc(36vh+var(--header-offset))] flex-col px-5 py-8 sm:px-10 sm:py-12 lg:min-h-[calc(100svh-var(--header-offset))] lg:scroll-mt-[var(--header-offset)] lg:px-14 lg:py-16${isCentered ? " justify-center" : ""}`}
     >
+      <div className={isLast ? "flex flex-1 flex-col justify-center" : "contents"}>
       {chapter.side ? (
         <p className="mb-4 w-fit rounded-full border border-[var(--line)] px-2.5 py-1 text-xs font-medium text-[var(--accent)]">
           {sideLabel[chapter.side]}
@@ -114,10 +115,24 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
         </p>
       ) : null}
       {isLast ? (
+        <div className="mt-10 max-w-md">
+          <p className="font-[family-name:var(--font-hand)] text-xl text-[var(--accent)] sm:text-3xl">Want to learn about USDT?</p>
+          <a
+            href="https://whatisusdt.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex w-fit rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-white"
+          >
+            See How It Works
+          </a>
+        </div>
+      ) : null}
+      </div>
+      {isLast ? (
         <footer className="mt-12 max-w-md space-y-2 border-t border-[var(--line)] pt-8 text-sm leading-6 text-[var(--muted)]">
           <p>
-            Not affiliated with Circle. All figures are sourced from Circle’s public pages and may change. 
-            This project is for informational and educational purposes only.
+            Not affiliated with Circle. All figures are sourced from Circle’s public pages and may change. This project is
+            for informational and educational purposes only.
           </p>
           <p>
             Built by{" "}
