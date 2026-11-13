@@ -14,16 +14,16 @@ export function SiteHeader({ title, labels, active, onJump, ref }: SiteHeaderPro
       ref={ref}
       className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--paper)]/95 px-4 py-3 backdrop-blur-sm sm:px-6"
     >
-      <p className="text-center font-[family-name:var(--font-hand)] text-3xl leading-none text-[var(--ink)] md:text-5xl">
+      <p className="text-center font-[family-name:var(--font-hand)] text-2xl leading-none text-[var(--ink)] sm:text-3xl md:text-5xl">
         {title}
       </p>
-      <div className="mt-3 flex items-center gap-3">
-        <p className="grid size-14 shrink-0 place-items-center rounded-2xl border-2 border-[var(--accent)] font-[family-name:var(--font-hand)] text-3xl leading-none text-[var(--accent)]">
+      <div className="mt-2.5 flex items-center gap-3 sm:mt-3">
+        <p className="grid size-11 shrink-0 place-items-center rounded-xl border-2 border-[var(--accent)] font-[family-name:var(--font-hand)] text-2xl leading-none text-[var(--accent)] sm:size-14 sm:rounded-2xl sm:text-3xl">
           {active + 1}
         </p>
         <div className="min-w-0 flex-1">
           <p className="text-xs tracking-wide text-[var(--muted)]">of {labels.length}</p>
-          <p className="truncate text-base text-[var(--ink)]">{labels[active]}</p>
+          <p className="truncate text-sm text-[var(--ink)] sm:text-base">{labels[active]}</p>
         </div>
       </div>
       <nav aria-label="Jump to a step" className="mt-3 flex h-1.5 gap-0.5">

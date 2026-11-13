@@ -25,7 +25,7 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: C
     <section
       ref={ref}
       id={chapter.id}
-      className={`flex min-h-[62vh] scroll-mt-[calc(36vh+var(--header-offset))] flex-col px-5 py-12 sm:px-10 lg:min-h-[calc(100svh-var(--header-offset))] lg:scroll-mt-[var(--header-offset)] lg:px-14 lg:py-16${isCentered ? " justify-center" : ""}`}
+      className={`flex min-h-[62vh] scroll-mt-[calc(36vh+var(--header-offset))] flex-col px-5 py-8 sm:px-10 sm:py-12 lg:min-h-[calc(100svh-var(--header-offset))] lg:scroll-mt-[var(--header-offset)] lg:px-14 lg:py-16${isCentered ? " justify-center" : ""}`}
     >
       {chapter.side ? (
         <p className="mb-4 w-fit rounded-full border border-[var(--line)] px-2.5 py-1 text-xs font-medium text-[var(--accent)]">
@@ -33,21 +33,21 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, ref }: C
         </p>
       ) : null}
       {index === 0 ? (
-        <h1 className="max-w-md font-[family-name:var(--font-hand)] text-5xl leading-none text-[var(--accent)] sm:text-6xl">
+        <h1 className="max-w-md font-[family-name:var(--font-hand)] text-[2rem] leading-tight text-[var(--accent)] sm:text-5xl sm:leading-none lg:text-6xl">
           {chapter.title}
         </h1>
       ) : (
-        <h2 className="max-w-md font-[family-name:var(--font-hand)] text-5xl leading-none text-[var(--accent)] sm:text-6xl">
+        <h2 className="max-w-md font-[family-name:var(--font-hand)] text-[2rem] leading-tight text-[var(--accent)] sm:text-5xl sm:leading-none lg:text-6xl">
           {chapter.title}
         </h2>
       )}
-      <div className="mt-6 max-w-md space-y-4 text-lg leading-8 text-[var(--ink)]">
+      <div className="mt-4 max-w-md space-y-3 text-base leading-7 text-[var(--ink)] sm:mt-6 sm:space-y-4 sm:text-lg sm:leading-8">
         {chapter.paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
       {index === 0 ? (
-        <p className="mt-8 font-[family-name:var(--font-hand)] text-3xl text-[var(--accent)]">↓ Keep scrolling</p>
+        <p className="mt-6 font-[family-name:var(--font-hand)] text-xl text-[var(--accent)] sm:mt-8 sm:text-3xl">↓ Keep scrolling</p>
       ) : null}
       {chapter.glossary.length > 0 ? (
         <div className="mt-8 max-w-md space-y-3">
@@ -142,12 +142,12 @@ function Glossary({ term, body }: { term: string; body: string }) {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex items-center gap-2 text-left text-[var(--accent)]"
+        className="flex items-center gap-2 text-left text-sm text-[var(--accent)] sm:text-base"
       >
         <span className="grid size-5 place-items-center rounded-full border border-current text-xs">i</span>
         <span className="font-medium">{term}</span>
       </button>
-      {open ? <p className="mt-2 pl-7 text-base leading-7 text-[var(--muted)]">{body}</p> : null}
+      {open ? <p className="mt-2 pl-7 text-sm leading-6 text-[var(--muted)] sm:text-base sm:leading-7">{body}</p> : null}
     </div>
   );
 }
