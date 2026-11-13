@@ -8,6 +8,13 @@
   --accent: #2775ca;
   --background: var(--paper);
   --foreground: var(--ink);
+  --header-offset: 141px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-offset: 159px;
+  }
 }
 
 @theme inline {
