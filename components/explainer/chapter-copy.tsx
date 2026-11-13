@@ -116,14 +116,17 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
       ) : null}
       {isLast ? (
         <div className="mt-10 max-w-md">
-          <p className="font-[family-name:var(--font-hand)] text-xl text-[var(--accent)] sm:text-3xl">Want to learn about USDT?</p>
+          <p className="font-[family-name:var(--font-hand)] text-xl text-[var(--accent)] sm:text-3xl">Want to understand how USDT works?</p>
+          <p className="mt-4 text-base leading-7 text-[var(--ink)] sm:text-lg sm:leading-8">
+            USDC is not the only dollar stablecoin in circulation. USDT takes a different approach to issuing and managing digital dollars.
+          </p>
           <a
             href="https://whatisusdt.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex w-fit rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[var(--on-accent)]"
           >
-            See How It Works
+            Explore the USDT explainer
           </a>
         </div>
       ) : null}
@@ -131,8 +134,9 @@ export function ChapterCopy({ chapter, index, isLast, filter, onFilter, toy, onT
       {isLast ? (
         <footer className="mt-12 max-w-md space-y-2 border-t border-[var(--line)] pt-8 text-sm leading-6 text-[var(--muted)]">
           <p>
-            Not affiliated with Circle. All figures are sourced from Circle’s public pages and may change. This project is
-            for informational and educational purposes only.
+            Not affiliated with Circle. 
+            Data sourced from Circle’s publicly available materials and subject to change. 
+            This project is for informational and educational purposes only.
           </p>
           <p>
             Built by{" "}

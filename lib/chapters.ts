@@ -444,11 +444,12 @@ export const chapters: Chapter[] = [
   },
   {
     id: "check",
-    title: "Check it yourself",
+    title: "Do not take our word for it.",
     scene: "intro",
     side: null,
     paragraphs: [
-      "The balance and the contract are public. The reserves, the cash-out, and the freeze rules are on Circle’s pages. Open them.",
+      "USDC is built on public infrastructure, but understanding it means looking beyond the token itself. Its reserves, redemption process, and freeze policies are documented by Circle. The contract is on-chain and publicly verifiable.",
+      "Explore the original sources yourself.",
     ],
     glossary: [],
     sources: [],
